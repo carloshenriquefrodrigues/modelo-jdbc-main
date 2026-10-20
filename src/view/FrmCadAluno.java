@@ -203,8 +203,8 @@ public class FrmCadAluno extends javax.swing.JFrame {
         try {
             Produto prod = new Produto();
             prod.setNome(txtNome.getText());
-            prod.setTelefone((int)spnQuantidade.getValue());
-            prod.setCurso(Double.parseDouble(txtCurso.getText()));
+            prod.setTelefone(txtTelefone.getText());
+            prod.setCurso(txtCurso.getText());
 
             dao.salvarProduto(prod);
             lista.clear();
