@@ -9,7 +9,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import model.Professor;
-
+import dao.DaoProfessor;
 /**
  *
  * @author afranio
@@ -17,8 +17,8 @@ import model.Professor;
 public class FrmCadProfessor extends javax.swing.JFrame {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCadProfessor.class.getName());
-    private DaoPessoa dao = new DaoPessoa();
-    private List<Pessoa> lista = dao.getPessoas();
+    private DaoProfessor dao = new DaoProfessor();
+    private List<Professor> lista = dao.getProfessores();
     private int indice = 0;
 
     /**
@@ -163,8 +163,8 @@ public class FrmCadProfessor extends javax.swing.JFrame {
                 .addGap(14, 14, 14)
                 .addComponent(lblTitulo)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNome)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblNome, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -199,15 +199,15 @@ public class FrmCadProfessor extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
 
-        Pessoa fulano = new Pessoa();
+        Professor fulano = new Professor();
 
         fulano.setNome(txtNome.getText());
-        fulano.setCpf(txtTelefone.getText().replace(".", "").replace("-", ""));
-        fulano.setIdade((int) txtIdade.getValue());
+        fulano.setTelefone(txtTelefone.getText().replace(".", "").replace("-", ""));
+        fulano.setDisciplina(txtDisciplina.getText());
 
-        dao.salvarPessoa(fulano);
+        dao.salvarProfessor(fulano);
         lista.clear();
-        lista = dao.getPessoas();
+        lista = dao.getProfessores();
         
         indice = lista.size() - 1;
         atualizarInterface();
@@ -215,29 +215,29 @@ public class FrmCadProfessor extends javax.swing.JFrame {
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
         if (!lista.isEmpty()) {
-            String cpf = txtTelefone.getText().replace(".", "").replace("-", "");
+            String telefone = txtTelefone.getText().replace(".", "").replace("-", "");
             int pos = -1;
             for (int i = 0; i < lista.size(); i++) {
-                if (cpf.equals(lista.get(i).getCpf())) {
+                if (telefone.equals(lista.get(i).getTelefone())) {
                     pos = i;
                 }
             }
             if (pos != -1) {
-                int remover = JOptionPane.showConfirmDialog(this, "Você tem certeza que deseja apagar essa pessoa:\n"
+                int remover = JOptionPane.showConfirmDialog(this, "Você tem certeza que deseja apagar essa professor:\n"
                         + lista.get(pos).toString(), "Excluir", JOptionPane.YES_NO_OPTION);
                 if (remover == JOptionPane.YES_OPTION) {
-                    dao.excluirPessoa(lista.get(pos).getCpf());
+                    dao.excluirProfessor(lista.get(pos).getId());
                     lista.clear();
-                    lista = dao.getPessoas();
+                    lista = dao.getProfessores();
                     indice = lista.size() - 1;
                     atualizarInterface();
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "O CPF pesquisado não se encontra na lista");
+                JOptionPane.showMessageDialog(this, "O professor pesquisado não se encontra na lista");
             }
 
         } else {
-            JOptionPane.showMessageDialog(this, "Não exitem pessoas cadastradas");
+            JOptionPane.showMessageDialog(this, "Não exitem professores cadastradas");
         }
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -272,8 +272,8 @@ public class FrmCadProfessor extends javax.swing.JFrame {
     public void mostrarDadosTela() {
         try {
             txtNome.setText(lista.get(indice).getNome());
-            txtTelefone.setText(lista.get(indice).getCpf());
-            txtIdade.setValue(lista.get(indice).getIdade());
+            txtTelefone.setText(lista.get(indice).getTelefone());
+            txtDisciplina.setText(lista.get(indice).getDisciplina());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro ao mostrar dados na tela: " + e.getMessage());
         }
@@ -282,7 +282,7 @@ public class FrmCadProfessor extends javax.swing.JFrame {
     public void limparCampos() {
         txtNome.setText("");
         txtTelefone.setText("");
-        txtIdade.setValue(0);
+        txtDisciplina.setText("");
     }
     public void desabilitarTodosBotoes() {
         btnPrimeiro.setEnabled(false);

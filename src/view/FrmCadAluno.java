@@ -4,6 +4,7 @@
  */
 package view;
 
+import dao.DaoAluno;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -16,8 +17,8 @@ import model.Aluno;
 public class FrmCadAluno extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCadAluno.class.getName());
-    DaoProduto dao = new DaoProduto();
-    List<Produto> lista = dao.getProdutos();
+    DaoAluno dao = new DaoAluno();
+    List<Aluno> lista = dao.getAlunos();
     int indice = 0;
     /**
      * Creates new form FrmCadProduto
@@ -42,7 +43,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
         lblNome = new javax.swing.JLabel();
         lblTelefone = new javax.swing.JLabel();
         lblCurso = new javax.swing.JLabel();
-        txtNome = new javax.swing.JTextField();
+        txtId = new javax.swing.JTextField();
         txtCurso = new javax.swing.JTextField();
         btnNovo = new javax.swing.JButton();
         btnSalvar = new javax.swing.JButton();
@@ -52,6 +53,8 @@ public class FrmCadAluno extends javax.swing.JFrame {
         btnProximo = new javax.swing.JButton();
         btnUltimo = new javax.swing.JButton();
         txtTelefone = new javax.swing.JTextField();
+        lblId = new javax.swing.JLabel();
+        txtNome = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -118,6 +121,8 @@ public class FrmCadAluno extends javax.swing.JFrame {
             }
         });
 
+        lblId.setText("Id");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -152,12 +157,15 @@ public class FrmCadAluno extends javax.swing.JFrame {
                                     .addComponent(lblTelefone)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(12, 12, 12)
-                                .addComponent(lblNome)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblId)
+                                    .addComponent(lblNome))))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
-                            .addComponent(txtTelefone)
-                            .addComponent(txtCurso))))
+                            .addComponent(txtTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(txtCurso)
+                            .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
+                            .addComponent(txtNome))))
                 .addContainerGap(70, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -165,11 +173,15 @@ public class FrmCadAluno extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addComponent(lblTitulo)
-                .addGap(37, 37, 37)
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblId)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNome)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTelefone)
                     .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -188,7 +200,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
                     .addComponent(btnAnterior)
                     .addComponent(btnProximo)
                     .addComponent(btnUltimo))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         pack();
@@ -202,18 +214,18 @@ public class FrmCadAluno extends javax.swing.JFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         try {
-            Produto prod = new Produto();
-            prod.setNome(txtNome.getText());
-            prod.setTelefone(txtTelefone.getText());
-            prod.setCurso(txtCurso.getText());
+            Aluno aluno = new Aluno();
+            aluno.setNome(txtId.getText());
+            aluno.setTelefone(txtTelefone.getText());
+            aluno.setCurso(txtCurso.getText());
 
-            dao.salvarProduto(prod);
+            dao.salvarAluno(aluno);
             lista.clear();
-            lista = dao.getProdutos();
+            lista = dao.getAlunos();
             
-            System.out.println("Produto salvo com sucesso: " + prod.toString());
+            System.out.println("Aluno salvo com sucesso: " + aluno.toString());
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Erro ao salvar produto!!!");
+            JOptionPane.showMessageDialog(this, "Erro ao salvar aluno!!!");
         } finally {
             indice = lista.size() - 1;
             atualizarInterface();
@@ -233,8 +245,8 @@ public class FrmCadAluno extends javax.swing.JFrame {
                 int remover = JOptionPane.showConfirmDialog(this, "Você tem certeza que deseja apagar:\n"
                         + lista.get(pos).toString(), "Excluir", JOptionPane.YES_NO_OPTION);
                 if (remover == JOptionPane.YES_OPTION) {
-                    dao.excluirProduto(lista.get(pos).getId());
-                    lista = dao.getProdutos();
+                    dao.excluirAluno(lista.get(pos).getId());
+                    lista = dao.getAlunos();
                     indice = lista.size() - 1;
                     atualizarInterface();
                 }
@@ -313,19 +325,21 @@ public class FrmCadAluno extends javax.swing.JFrame {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnUltimo;
     private javax.swing.JLabel lblCurso;
+    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblTelefone;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtCurso;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables
 public void mostrarDadosTela() {
         try {
             txtId.setText(""+lista.get(indice).getId());    
-            txtNome.setText(lista.get(indice).getDescricao());
-            spnQuantidade.setValue(lista.get(indice).getQuantidade());
-            txtCurso.setText(""+lista.get(indice).getValor());
+            txtNome.setText(lista.get(indice).getNome());
+            txtTelefone.setText(lista.get(indice).getTelefone());
+            txtCurso.setText(""+lista.get(indice).getCurso());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro ao mostrar dados na tela: " + e.getMessage());
         }
@@ -334,7 +348,7 @@ public void mostrarDadosTela() {
     public void limparCampos() {
         txtId.setText("");
         txtNome.setText("");
-        spnQuantidade.setValue(0);
+        txtTelefone.setText("");
         txtCurso.setText("");
     }
 
