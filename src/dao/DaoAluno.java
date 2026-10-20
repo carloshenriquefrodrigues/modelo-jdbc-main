@@ -8,54 +8,49 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
-import model.Carro;
+import model.Produto;
 
 
-public class DaoCarro {
-    
+public class DaoAluno {
    
     Connection con = null;
     PreparedStatement pstm = null;
 
-public List<Carro> getCarros() {
-    List<Carro> lista = new ArrayList<Carro>();
+public List<Produto> getProdutos() {
+    List<Produto> lista = new ArrayList<Produto>();
     ResultSet rs = null;
     con = new Conexao().conectaBanco();
     
-    try{
+    try {
   
-    pstm = con.prepareStatement("SELECT * FROM tb_carro", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+    pstm = con.prepareStatement("SELECT * FROM tb_produto", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
     
     rs =  this.pstm.executeQuery();
-    if(rs.first())
-    {
-        do{
-             Carro c = new Carro();
-             c.setId(rs.getInt("id"));
-             c.setModelo(rs.getString("modelo"));
-             c.setMarca(rs.getString("marca"));
-             c.setAno(rs.getInt("ano"));
-             
-             lista.add(c);
+    if(rs.first()) {
+        do {
+             Produto p = new Produto();
+             p.setId(rs.getInt("id"));
+             p.setDescricao(rs.getString("descricao"));             
+             p.setQuantidade(rs.getInt("quantidade"));             
+             p.setValor(rs.getInt("valor"));             
+             lista.add(p);
             
-        }while(rs.next());
+        } while(rs.next());
     }
     
     pstm.close();
   
     }   
-    catch(SQLException erro)
-    {
+    catch(SQLException erro) {
         JOptionPane.showMessageDialog(null, "Erro ao buscar dados no BD "+erro);
     }
     
     
-    finally{
-        try{
+    finally {
+        try {
         con.close();
         }
-        catch(SQLException err)
-        {
+        catch(SQLException err) {
             JOptionPane.showMessageDialog(null, "Erro ao fechar a conexão de busca "+err);
         }
     }
@@ -64,21 +59,21 @@ public List<Carro> getCarros() {
 }
       
     
-public void salvarCarro(Carro car) {
+public void salvarProduto(Produto prod) {
     con = new Conexao().conectaBanco();
     
-    try{
-    pstm = con.prepareStatement("INSERT INTO tb_carro (modelo,marca,ano) VALUES (?,?,?)");
-    pstm.setString(1,car.getModelo());
-    pstm.setString(2,car.getMarca());
-    pstm.setInt(3, car.getAno());
+    try {
+    pstm = con.prepareStatement("INSERT INTO tb_produto (descricao,quantidade,valor) VALUES (?,?,?)");
+    pstm.setString(1,prod.getDescricao());
+    pstm.setInt(2,prod.getQuantidade());
+    pstm.setInt(3,(int) prod.getValor()); 
     this.pstm.execute();
     
     
     pstm.close();
     }
     catch(SQLException erro) {
-        JOptionPane.showMessageDialog(null, "Erro ao salvar carro no BD "+erro);
+        JOptionPane.showMessageDialog(null, "Erro ao salvar produto no BD "+erro);
     }
     finally{
         try{
@@ -95,12 +90,12 @@ public void salvarCarro(Carro car) {
 
 
 
-public void exlcuirCarro(int id)
+public void excluirProduto(int id)
 {
     con = new Conexao().conectaBanco();
     
     try{
-    pstm = con.prepareStatement("DELETE FROM tb_carro  WHERE id=?");
+    pstm = con.prepareStatement("DELETE FROM tb_produto WHERE id=?");
     pstm.setInt(1,id);
    
     this.pstm.execute();
@@ -110,7 +105,7 @@ public void exlcuirCarro(int id)
     }
     catch(SQLException erro)
     {
-        JOptionPane.showMessageDialog(null, "Erro ao excluir carro no BD "+erro);
+        JOptionPane.showMessageDialog(null, "Erro ao excluir produto no BD "+erro);
     }
     finally{
         try{
