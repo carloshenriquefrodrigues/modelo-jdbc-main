@@ -10,6 +10,7 @@ import javax.swing.JOptionPane;
 
 import model.Professor;
 import dao.DaoProfessor;
+import model.Aluno;
 /**
  *
  * @author afranio
@@ -20,6 +21,7 @@ public class FrmCadProfessor extends javax.swing.JFrame {
     private DaoProfessor dao = new DaoProfessor();
     private List<Professor> lista = dao.getProfessores();
     private int indice = 0;
+    
 
     /**
      * Creates new form FrmCadPessoa
@@ -28,6 +30,7 @@ public class FrmCadProfessor extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         atualizarInterface();
+        txtId.setEditable(false);
     }
 
     /**
@@ -53,10 +56,13 @@ public class FrmCadProfessor extends javax.swing.JFrame {
         btnUltimo = new javax.swing.JButton();
         txtDisciplina = new javax.swing.JTextField();
         txtTelefone = new javax.swing.JTextField();
+        btnEditar = new javax.swing.JButton();
+        txtId = new javax.swing.JTextField();
+        lblId = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        lblTitulo.setText("Cadastro de Pessoa");
+        lblTitulo.setText("Cadastro de Professor");
 
         lblNome.setText("Nome:");
 
@@ -113,6 +119,15 @@ public class FrmCadProfessor extends javax.swing.JFrame {
             }
         });
 
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
+        lblId.setText("Id");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,49 +135,53 @@ public class FrmCadProfessor extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(lblDisciplina)
-                                .addGap(12, 12, 12))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblTelefone)
-                                    .addComponent(lblNome))
-                                .addGap(18, 18, 18)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
-                            .addComponent(txtDisciplina)
-                            .addComponent(txtTelefone, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
+                        .addGap(140, 140, 140)
                         .addComponent(lblTitulo))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(btnPrimeiro)
-                            .addComponent(btnNovo))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(33, 33, 33)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnSalvar)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDisciplina)
+                                    .addComponent(lblTelefone)
+                                    .addComponent(lblNome)
+                                    .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
-                                .addComponent(btnExcluir))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtNome)
+                                    .addComponent(txtDisciplina)
+                                    .addComponent(txtTelefone, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtId)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnAnterior)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnProximo)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(btnPrimeiro)
+                                    .addComponent(btnNovo))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnUltimo)))))
-                .addContainerGap(65, Short.MAX_VALUE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnSalvar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnExcluir)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnEditar))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnAnterior)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnProximo)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btnUltimo)))))))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(27, 27, 27)
                 .addComponent(lblTitulo)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblId))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblNome, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -178,14 +197,15 @@ public class FrmCadProfessor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNovo)
                     .addComponent(btnSalvar)
-                    .addComponent(btnExcluir))
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPrimeiro)
                     .addComponent(btnAnterior)
                     .addComponent(btnProximo)
                     .addComponent(btnUltimo))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         pack();
@@ -268,9 +288,24 @@ public class FrmCadProfessor extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Você já está na última pessoa");
         }
     }//GEN-LAST:event_btnProximoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+//        System.out.println(indice);
+        Professor professor = new Professor();
+        professor.setId(Integer.parseInt(txtId.getText()));
+        professor.setNome(txtNome.getText());
+        professor.setTelefone(txtTelefone.getText());
+        professor.setDisciplina(txtDisciplina.getText());
+        System.out.println(professor.getId());
+
+        dao.editarProfessor(professor);
+        lista.clear();
+        lista = dao.getProfessores();        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEditarActionPerformed
     
     public void mostrarDadosTela() {
         try {
+            txtId.setText(String.valueOf(lista.get(indice).getId()));
             txtNome.setText(lista.get(indice).getNome());
             txtTelefone.setText(lista.get(indice).getTelefone());
             txtDisciplina.setText(lista.get(indice).getDisciplina());
@@ -349,6 +384,7 @@ public class FrmCadProfessor extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPrimeiro;
@@ -356,10 +392,12 @@ public class FrmCadProfessor extends javax.swing.JFrame {
     private javax.swing.JButton btnSalvar;
     private javax.swing.JButton btnUltimo;
     private javax.swing.JLabel lblDisciplina;
+    private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblTelefone;
     private javax.swing.JLabel lblTitulo;
     private javax.swing.JTextField txtDisciplina;
+    private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtTelefone;
     // End of variables declaration//GEN-END:variables

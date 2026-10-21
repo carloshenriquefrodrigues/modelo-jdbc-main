@@ -15,11 +15,12 @@ import model.Aluno;
  * @author afranio
  */
 public class FrmCadAluno extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmCadAluno.class.getName());
     DaoAluno dao = new DaoAluno();
     List<Aluno> lista = dao.getAlunos();
     int indice = 0;
+
     /**
      * Creates new form FrmCadProduto
      */
@@ -28,6 +29,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         atualizarInterface();
         mostrarDadosTela();
+        txtId.setEditable(false);
     }
 
     /**
@@ -55,6 +57,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
         txtTelefone = new javax.swing.JTextField();
         lblId = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
+        btnEditar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -123,6 +126,13 @@ public class FrmCadAluno extends javax.swing.JFrame {
 
         lblId.setText("Id");
 
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -147,7 +157,9 @@ public class FrmCadAluno extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(btnSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btnExcluir))))
+                                .addComponent(btnExcluir)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnEditar))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -166,7 +178,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
                             .addComponent(txtCurso)
                             .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 220, Short.MAX_VALUE)
                             .addComponent(txtNome))))
-                .addContainerGap(70, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -193,7 +205,8 @@ public class FrmCadAluno extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNovo)
                     .addComponent(btnSalvar)
-                    .addComponent(btnExcluir))
+                    .addComponent(btnExcluir)
+                    .addComponent(btnEditar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnPrimeiro)
@@ -222,7 +235,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
             dao.salvarAluno(aluno);
             lista.clear();
             lista = dao.getAlunos();
-            
+
             System.out.println("Aluno salvo com sucesso: " + aluno.toString());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Erro ao salvar aluno!!!");
@@ -233,7 +246,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed
-         if (!lista.isEmpty()) {
+        if (!lista.isEmpty()) {
             int id = Integer.parseInt(txtId.getText());
             int pos = -1;
             for (int i = 0; i < lista.size(); i++) {
@@ -291,6 +304,20 @@ public class FrmCadAluno extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefoneActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+//        System.out.println(indice);
+        Aluno aluno = new Aluno();
+        aluno.setId(Integer.parseInt(txtId.getText()));
+        aluno.setNome(txtNome.getText());
+        aluno.setTelefone(txtTelefone.getText());
+        aluno.setCurso(txtCurso.getText());
+        System.out.println(aluno.getId());
+
+        dao.editarAluno(aluno);
+        lista.clear();
+        lista = dao.getAlunos();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -318,6 +345,7 @@ public class FrmCadAluno extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAnterior;
+    private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnExcluir;
     private javax.swing.JButton btnNovo;
     private javax.swing.JButton btnPrimeiro;
@@ -336,10 +364,10 @@ public class FrmCadAluno extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 public void mostrarDadosTela() {
         try {
-            txtId.setText(""+lista.get(indice).getId());    
+            txtId.setText("" + lista.get(indice).getId());
             txtNome.setText(lista.get(indice).getNome());
             txtTelefone.setText(lista.get(indice).getTelefone());
-            txtCurso.setText(""+lista.get(indice).getCurso());
+            txtCurso.setText("" + lista.get(indice).getCurso());
         } catch (IndexOutOfBoundsException e) {
             System.out.println("Erro ao mostrar dados na tela: " + e.getMessage());
         }
@@ -370,7 +398,7 @@ public void mostrarDadosTela() {
                 btnAnterior.setEnabled(false);
                 btnProximo.setEnabled(false);
                 btnUltimo.setEnabled(false);
-            }  else if (indice == 0 && lista.size() == 1) {
+            } else if (indice == 0 && lista.size() == 1) {
                 btnPrimeiro.setEnabled(false);
                 btnAnterior.setEnabled(false);
                 btnUltimo.setEnabled(false);
@@ -395,7 +423,7 @@ public void mostrarDadosTela() {
         mostrarDadosTela();
     }
 
-        public void desabilitarTodosBotoes() {
+    public void desabilitarTodosBotoes() {
         btnPrimeiro.setEnabled(false);
         btnUltimo.setEnabled(false);
         btnProximo.setEnabled(false);
